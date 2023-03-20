@@ -1,0 +1,70 @@
+package ru.alishev.springcourse.FirstSecurityApp.models;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * @author Neil Alishev
+ */
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "Users")
+public class User {
+    @Id
+    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
+    @Column(name = "name")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "email")
+    @Email
+    private String email;
+
+    @Column(name = "role")
+    private String role;
+
+    @Column(name = "created_on")
+    private LocalDateTime created_on;
+
+    @Column(name = "updated_on")
+    private LocalDateTime updated_on;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Score> scores;
+
+    @OneToOne(mappedBy = "user",fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Rating rating;
+
+
+    public User(int id, String username, String password, String email, String role, LocalDateTime created_on) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.created_on = created_on;
+    }
+}
