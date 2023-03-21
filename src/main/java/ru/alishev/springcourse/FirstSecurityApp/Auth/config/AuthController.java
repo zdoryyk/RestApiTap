@@ -3,6 +3,8 @@ package ru.alishev.springcourse.FirstSecurityApp.Auth.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +17,7 @@ import ru.alishev.springcourse.FirstSecurityApp.Auth.config.security.JWTUtil;
 import ru.alishev.springcourse.FirstSecurityApp.Auth.config.services.RegistrationService;
 import ru.alishev.springcourse.FirstSecurityApp.services.UserService;
 import ru.alishev.springcourse.FirstSecurityApp.util.PersonValidator;
+import ru.alishev.springcourse.FirstSecurityApp.util.Response;
 
 import javax.validation.Valid;
 import java.io.Serializable;
@@ -34,7 +37,6 @@ public class AuthController {
     private final JWTUtil jwtUtil;
     private final ModelMapper modelMapper;
     private final AuthenticationManager authenticationManager;
-
     private final UserService userService;
 
     @Autowired
@@ -50,10 +52,16 @@ public class AuthController {
 
     @PostMapping("/register")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Token performRegistration(@RequestBody @Valid UserDTO userDTO,
+    public Object performRegistration(@RequestBody @Valid UserDTO userDTO,
                                                                          BindingResult bindingResult) {
         User user = convertToPerson(userDTO);
 
+        if(userService.getUserByEmail(userDTO.getEmail()) != null){
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.LOCKED,"THIS_EMAIL_TAKEN"));
+        }
+        if(userService.getByUserName(userDTO.getUsername()) != null){
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.LOCKED,"THIS_USERNAME_TAKEN"));
+        }
         registrationService.register(user);
 
 
@@ -66,7 +74,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Map<String, String> performLogin(@RequestBody AuthenticationDTO authenticationDTO) {
+    public Object performLogin(@RequestBody AuthenticationDTO authenticationDTO) {
 
         UsernamePasswordAuthenticationToken authInputToken =
                 new UsernamePasswordAuthenticationToken(authenticationDTO.getEmail(),
@@ -75,11 +83,13 @@ public class AuthController {
         try {
             authenticationManager.authenticate(authInputToken);
         } catch (BadCredentialsException e) {
-            return Map.of("message", "Incorrect credentials!");
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.LOCKED,"INCORRECT_PASSWORD_EMAIL"));
         }
 
         String token = jwtUtil.generateToken(authenticationDTO.getEmail());
-        return Map.of("jwt-token", token);
+        User user = userService.getUserByEmail(authenticationDTO.getEmail());
+
+        return new Token(user.getId(),user.getEmail(),user.getUsername(),token);
     }
 
     public User convertToPerson(UserDTO userDTO) {

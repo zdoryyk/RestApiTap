@@ -24,8 +24,7 @@ public class UserController {
         return service.getAllUsers();
     }
 
-    @GetMapping("/user")
-    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/user")
     public User getUserByEmail(@RequestBody UserDTO userDTO){
         return service.getUserByEmail(userDTO.getEmail());
     }

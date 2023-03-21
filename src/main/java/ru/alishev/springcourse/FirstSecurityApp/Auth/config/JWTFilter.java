@@ -32,8 +32,18 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = httpServletRequest.getHeader("Authorization");
-        if (authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")) {
-            String jwt = authHeader.substring(14);
+        System.out.println(authHeader == null);
+        if (authHeader != null) {
+            System.out.println(authHeader.isBlank());
+        }
+        System.out.println(authHeader);
+        if (authHeader != null
+                && !authHeader.isBlank()
+                && authHeader.startsWith("Bearer ")
+                && !authHeader.substring(7).equals("null")
+                && !authHeader.substring(7).equals("undefined")) {
+
+            String jwt = authHeader.substring(7);
             System.out.println(jwt);
             if (jwt.isBlank()) {
                 httpServletResponse.sendError(HttpServletResponse.SC_BAD_REQUEST,

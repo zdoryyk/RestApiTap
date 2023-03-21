@@ -22,7 +22,7 @@ public class JWTUtil {
 
 
     public String generateToken(String email) {
-        Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(60).toInstant());
+         Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(60).toInstant());
 
         return JWT.create()
                 .withSubject("User details")
