@@ -43,4 +43,14 @@ public class Score {
 
     public Score() {
     }
+
+    @Override
+    public String toString() {
+        return "Score{" +
+                "score_id=" + score_id +
+                ", points=" + points +
+                ", playedOn=" + playedOn +
+                ", user=" + user +
+                '}';
+    }
 }

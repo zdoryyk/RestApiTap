@@ -18,6 +18,7 @@ public class Token {
     private String token;
 
 
+
     public Token(int id, String email, String username, String token) {
         this.id = id;
         this.email = email;

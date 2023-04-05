@@ -22,7 +22,7 @@ public class PersonDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // SHOW_ACCOUNT, WITHDRAW_MONEY, SEND_MONEY
         // ROLE_ADMIN, ROLE_USER - это роли
-        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().toString()));
     }
 
     @Override

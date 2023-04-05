@@ -8,4 +8,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
+
+    Rating getRatingByUser_Id(int id);
 }

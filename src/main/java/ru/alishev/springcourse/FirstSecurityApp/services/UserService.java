@@ -29,4 +29,13 @@ public class UserService {
     public User getByUserName(String username) {
         return userRepository.getByUsername(username);
     }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
+    public void saveUser(User user){
+        userRepository.save(user);
+    }
+
 }

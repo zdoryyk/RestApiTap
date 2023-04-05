@@ -1,5 +1,5 @@
 package ru.alishev.springcourse.FirstSecurityApp.models;
 
 public enum Role {
-    USER,ADMIN
+    ROLE_USER,ROLE_ADMIN
 }

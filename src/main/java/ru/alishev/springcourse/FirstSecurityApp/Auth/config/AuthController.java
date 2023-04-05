@@ -20,9 +20,6 @@ import ru.alishev.springcourse.FirstSecurityApp.util.PersonValidator;
 import ru.alishev.springcourse.FirstSecurityApp.util.Response;
 
 import javax.validation.Valid;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Neil Alishev
@@ -33,7 +30,6 @@ import java.util.Map;
 public class AuthController {
 
     private final RegistrationService registrationService;
-    private final PersonValidator personValidator;
     private final JWTUtil jwtUtil;
     private final ModelMapper modelMapper;
     private final AuthenticationManager authenticationManager;
@@ -43,7 +39,6 @@ public class AuthController {
     public AuthController(RegistrationService registrationService, PersonValidator personValidator,
                           JWTUtil jwtUtil, ModelMapper modelMapper, AuthenticationManager authenticationManager, UserController userController, UserService userService) {
         this.registrationService = registrationService;
-        this.personValidator = personValidator;
         this.jwtUtil = jwtUtil;
         this.modelMapper = modelMapper;
         this .authenticationManager = authenticationManager;
@@ -69,6 +64,7 @@ public class AuthController {
 
         user = userService.getUserByEmail(userDTO.getEmail());
 
+
         return new Token(user.getId(),user.getEmail(),user.getUsername(),token);
     }
 
@@ -79,7 +75,7 @@ public class AuthController {
         UsernamePasswordAuthenticationToken authInputToken =
                 new UsernamePasswordAuthenticationToken(authenticationDTO.getEmail(),
                         authenticationDTO.getPassword());
-
+        System.out.println(authenticationDTO);
         try {
             authenticationManager.authenticate(authInputToken);
         } catch (BadCredentialsException e) {
