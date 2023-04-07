@@ -37,10 +37,8 @@ public class Board {
         int counter = 0;
 
         for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                array[i][j] = "0";
-            }
-        }
+            Arrays.fill(array[i], "0");
+        }1
 
         int row, col;
         for (int i = 0; i < columns; i++) {
@@ -72,9 +70,7 @@ public class Board {
     }
 
 
-    public boolean addInBoard(List<Tile> tiles){
-        Tile tile1 = tiles.get(0);
-        Tile tile2 = tiles.get(1);
+    public boolean addInBoard(Tile tile1, Tile tile2){
         if(Objects.equals(this.array[tile1.getX()][tile1.getY()], " ")
         && Objects.equals(this.array[tile2.getX()][tile2.getY()], " "))
         {
@@ -86,14 +82,10 @@ public class Board {
     }
 
 
-    public boolean handleInput(String[][] array, List<Tile> tiles) {
+    public boolean handleInput(int startRow, int startCol, int endRow, int endCol) {
 
 
         int size = array.length;
-        int startRow = tiles.get(0).getX();
-        int startCol = tiles.get(0).getY();
-        int endRow   = tiles.get(1).getX();
-        int endCol   = tiles.get(1).getY();
 
         String temp1 = array[startRow][startCol], temp2 = array[endRow][endCol];
 
@@ -154,6 +146,10 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public void reloadBoard(String[][] array){
+        this.array = array;
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.alishev.springcourse.FirstSecurityApp.controllers;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +9,12 @@ import ru.alishev.springcourse.FirstSecurityApp.models.logicModel.Board;
 import ru.alishev.springcourse.FirstSecurityApp.services.GameService;
 import ru.alishev.springcourse.FirstSecurityApp.util.Response;
 import ru.alishev.springcourse.FirstSecurityApp.util.Size;
+import ru.alishev.springcourse.FirstSecurityApp.util.StringArrayWrapper;
 import ru.alishev.springcourse.FirstSecurityApp.util.Tile;
 
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +24,8 @@ import java.util.Map;
 public class GameController {
 
     private final Board board;
-    private String[][] field;
-
     private final GameService service;
-    private Map<String, Tile> tiles;
+
 
     @Autowired
     public GameController(Board board, GameService service) {
@@ -34,13 +36,12 @@ public class GameController {
 
     @PostMapping("/generate")
     public String[][] generateBoard(@RequestBody Size size){
-        field = this.board.generateBoard(size.getColumns(),size.getRows());
-        return field;
+        return this.board.generateBoard(size.getColumns(),size.getRows());
     }
 
     @PostMapping("/handle-input")
     public ResponseEntity<?> handleInput(@RequestBody Tile[] tiles){
-        if(service.handleInput(this.field, new ArrayList<>(List.of(tiles[0],tiles[1])))){
+        if(service.handleInput(new ArrayList<>(List.of(tiles[0],tiles[1])))){
            return ResponseEntity.ok(new Response(HttpStatus.CONTINUE,"OK"));
         }
         return ResponseEntity.ok(new Response(HttpStatus.FORBIDDEN,"FORBIDDEN"));
@@ -48,10 +49,16 @@ public class GameController {
 
     @PutMapping("/return-tile")
     public ResponseEntity<?> returnTile(@RequestBody Tile[] tile){
-        if(this.board.addInBoard(List.of(tile[0],tile[1]))){
+        if(this.service.addInBoard(List.of(tile[0],tile[1]))){
             return ResponseEntity.ok(new Response(HttpStatus.CONTINUE,"OK"));
         }
         return ResponseEntity.ok(new Response(HttpStatus.FORBIDDEN,"FORBIDDEN"));
+    }
+
+    @PostMapping("/regenerate-field")
+    public ResponseEntity<?> regenerateField(@RequestBody StringArrayWrapper stringArrayWrapper){
+        board.reloadBoard(stringArrayWrapper.getArray());
+        return ResponseEntity.ok().body(new Response(HttpStatus.ACCEPTED,"ACCEPTED"));
     }
 
 

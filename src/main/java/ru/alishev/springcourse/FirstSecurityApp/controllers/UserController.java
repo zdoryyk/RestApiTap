@@ -48,7 +48,6 @@ public class UserController {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.LOCKED,"YOU CANT DELETE ADMIN"));
         }
         service.deleteUser(user);
-        System.out.println("123");
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
