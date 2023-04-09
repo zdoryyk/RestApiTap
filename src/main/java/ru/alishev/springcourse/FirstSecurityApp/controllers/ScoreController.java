@@ -54,6 +54,12 @@ public class ScoreController {
     }
 
 
+    @GetMapping("/sort-score")
+    public List<ScoreDTO> getSortedScores(){
+        return scoreService.getSortedScores();
+    }
+
+
     @PostMapping("/user-score")
     public List<Score> getUserScore(@RequestBody UserDTO userDTO){
         return scoreService.getScoreByUserId(userDTO.getId());

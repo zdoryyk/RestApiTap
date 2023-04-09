@@ -7,14 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScoreDTO {
+public class RatingDTO {
 
-    private int user_id;
     private String username;
     private int points;
 
-    public ScoreDTO(String username, int points) {
-        this.username = username;
-        this.points = points;
-    }
 }
