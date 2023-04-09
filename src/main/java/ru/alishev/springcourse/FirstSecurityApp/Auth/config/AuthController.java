@@ -47,9 +47,10 @@ public class AuthController {
 
     @PostMapping("/register")
     @CrossOrigin(origins = "http://localhost:4200")
-    public Object performRegistration(@RequestBody @Valid UserDTO userDTO,
-                                                                         BindingResult bindingResult) {
+    public Object performRegistration(@RequestBody @Valid UserDTO userDTO, BindingResult bindingResult) {
+        System.out.println(userDTO);
         User user = convertToPerson(userDTO);
+        System.out.println(user);
 
         if(userService.getUserByEmail(userDTO.getEmail()) != null){
             return ResponseEntity.badRequest().body(new Response(HttpStatus.LOCKED,"THIS_EMAIL_TAKEN"));
@@ -71,14 +72,18 @@ public class AuthController {
     @PostMapping("/login")
     @CrossOrigin(origins = "http://localhost:4200")
     public Object performLogin(@RequestBody AuthenticationDTO authenticationDTO) {
+        if(authenticationDTO.getPassword() != null && !authenticationDTO.getPassword().isEmpty() && !authenticationDTO.getPassword().isBlank()) {
 
-        UsernamePasswordAuthenticationToken authInputToken =
-                new UsernamePasswordAuthenticationToken(authenticationDTO.getEmail(),
-                        authenticationDTO.getPassword());
-        try {
-            authenticationManager.authenticate(authInputToken);
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.badRequest().body(new Response(HttpStatus.LOCKED,"INCORRECT_PASSWORD_EMAIL"));
+            System.out.println(authenticationDTO);
+            UsernamePasswordAuthenticationToken authInputToken =
+                    new UsernamePasswordAuthenticationToken(authenticationDTO.getEmail(),
+                            authenticationDTO.getPassword());
+
+            try {
+                authenticationManager.authenticate(authInputToken);
+            } catch (BadCredentialsException e) {
+                return ResponseEntity.badRequest().body(new Response(HttpStatus.LOCKED, "INCORRECT_PASSWORD_EMAIL"));
+            }
         }
 
         String token = jwtUtil.generateToken(authenticationDTO.getEmail());

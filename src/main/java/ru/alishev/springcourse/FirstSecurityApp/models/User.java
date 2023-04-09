@@ -1,7 +1,6 @@
 package ru.alishev.springcourse.FirstSecurityApp.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -46,6 +45,9 @@ public class User {
     @Column(name = "updated_on")
     private LocalDateTime updated_on;
 
+    @Column(name = "photo_url")
+    private String photoUrl;
+
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Comment> commentList;
@@ -58,13 +60,31 @@ public class User {
     @JsonManagedReference
     private Rating rating;
 
-
-    public User(int id, String username, String password, String email, String role, LocalDateTime created_on) {
+    public User(int id, String username, String password, String email, String role, LocalDateTime created_on, LocalDateTime updated_on, String photoUrl) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
         this.created_on = created_on;
+        this.updated_on = updated_on;
+        this.photoUrl = photoUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", created_on=" + created_on +
+                ", updated_on=" + updated_on +
+                ", photo_url='" + photoUrl + '\'' +
+                ", commentList=" + commentList +
+                ", scores=" + scores +
+                ", rating=" + rating +
+                '}';
     }
 }

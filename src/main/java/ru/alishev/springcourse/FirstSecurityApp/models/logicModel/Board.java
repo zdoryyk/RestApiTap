@@ -38,7 +38,7 @@ public class Board {
 
         for (int i = 0; i < columns; i++) {
             Arrays.fill(array[i], "0");
-        }1
+        }
 
         int row, col;
         for (int i = 0; i < columns; i++) {

@@ -34,7 +34,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String authHeader = httpServletRequest.getHeader("Authorization");
         if (authHeader != null
                 && !authHeader.isBlank()
-                && authHeader.startsWith("Bearer ")
+                &&  authHeader.startsWith("Bearer ")
                 && !authHeader.substring(7).equals("null")
                 && !authHeader.substring(7).equals("undefined")) {
 

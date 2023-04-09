@@ -56,7 +56,6 @@ public class ScoreController {
 
     @PostMapping("/user-score")
     public List<Score> getUserScore(@RequestBody UserDTO userDTO){
-        System.out.println(userDTO);
         return scoreService.getScoreByUserId(userDTO.getId());
     }
 
