@@ -1,4 +1,4 @@
-package ru.alishev.springcourse.FirstSecurityApp.Auth.config;
+package ru.alishev.springcourse.FirstSecurityApp.controllers;
 
 
 import org.modelmapper.ModelMapper;
@@ -10,6 +10,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.alishev.springcourse.FirstSecurityApp.Auth.config.AuthenticationDTO;
+import ru.alishev.springcourse.FirstSecurityApp.Auth.config.Token;
 import ru.alishev.springcourse.FirstSecurityApp.controllers.UserController;
 import ru.alishev.springcourse.FirstSecurityApp.dto.UserDTO;
 import ru.alishev.springcourse.FirstSecurityApp.models.User;
@@ -72,9 +74,13 @@ public class AuthController {
     @PostMapping("/login")
     @CrossOrigin(origins = "http://localhost:4200")
     public Object performLogin(@RequestBody AuthenticationDTO authenticationDTO) {
+
+        if(userService.getUserByEmail(authenticationDTO.getEmail()) == null) {
+            return ResponseEntity.badRequest().body(new Response(HttpStatus.FORBIDDEN,"USER_NOT_FOUND"));
+        }
+
         if(authenticationDTO.getPassword() != null && !authenticationDTO.getPassword().isEmpty() && !authenticationDTO.getPassword().isBlank()) {
 
-            System.out.println(authenticationDTO);
             UsernamePasswordAuthenticationToken authInputToken =
                     new UsernamePasswordAuthenticationToken(authenticationDTO.getEmail(),
                             authenticationDTO.getPassword());

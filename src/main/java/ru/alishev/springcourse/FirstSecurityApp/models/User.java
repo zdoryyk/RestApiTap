@@ -1,6 +1,7 @@
 package ru.alishev.springcourse.FirstSecurityApp.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -59,6 +60,7 @@ public class User {
     @OneToOne(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JsonManagedReference
     private Rating rating;
+
 
     public User(int id, String username, String password, String email, String role, LocalDateTime created_on, LocalDateTime updated_on, String photoUrl) {
         this.id = id;

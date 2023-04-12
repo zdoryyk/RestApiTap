@@ -37,7 +37,6 @@ public class ScoreService {
             Integer points = (Integer) user[1];
             scoreDTOS.add(new ScoreDTO(username,points));
         }
-
         return scoreDTOS;
     }
 }
