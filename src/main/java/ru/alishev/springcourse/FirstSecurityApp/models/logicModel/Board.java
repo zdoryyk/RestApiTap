@@ -16,9 +16,12 @@ public class Board {
 
 
     private String[][] array;
+    private int cols;
+    private int rows;
 
     public String[][] generateBoard(int columns, int rows) {
-
+        this.cols = columns;
+        this.rows = rows;
         List<Character> symbols = new ArrayList<>();
         for (int i = 1; i <= 9; i++) {
             symbols.add((char) ('0' + i));
@@ -86,8 +89,14 @@ public class Board {
 
 
         int size = array.length;
+        System.out.println("SIZE " + size);
 
         String temp1 = array[startRow][startCol], temp2 = array[endRow][endCol];
+
+        System.out.println("START ROW " + startRow);
+        System.out.println("START COL " + startCol);
+        System.out.println("END ROW " + endRow);
+        System.out.println("END COL " + endCol);
 
         if(array[startRow][startCol].equals(array[endRow][endCol])) {
             array[startRow][startCol] = " ";
@@ -100,11 +109,13 @@ public class Board {
                 array[startRow][startCol] = temp1;
                 array[endRow][endCol] = temp2;
             }
-            if(startCol == endCol && (startCol == 0 || startCol == size -1)){
+                System.out.println("FIRST");
+            if(startCol == endCol && (startCol == 0 || startCol == rows -1 || startCol == cols -1)){
                 array[startRow][startCol] = " ";
                 array[endRow][endCol] = " ";
+
                 return true;
-            }else if(startRow == endRow && (startRow == 0 || startRow == size -1)){
+            }else if(startRow == endRow && (startRow == 0 || startCol == rows -1 || startCol == cols -1)){
                 array[startRow][startCol] = " ";
                 array[endRow][endCol] = " ";
                 return true;
