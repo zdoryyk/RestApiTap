@@ -40,8 +40,9 @@ public class ScoreController {
             return ResponseEntity.badRequest().body(new Response(HttpStatus.NOT_FOUND,"NOT_FOUND"));
         }
         try {
-            Score score = convertToScore(scoreDTO);
+            Score score = new Score();
             score.setUser(user);
+            score.setPoints(scoreDTO.getPoints());
             scoreService.addScore(score);
             user.setScores(scoreService.getScoreByUserId(user.getId()));
             userService.saveUser(user);

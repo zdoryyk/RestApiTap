@@ -19,6 +19,7 @@ import java.util.concurrent.RecursiveTask;
 public class RatingService {
 
     final RatingRepository repository;
+
     final UserService userService;
 
     public List<Rating> getAllRating(){

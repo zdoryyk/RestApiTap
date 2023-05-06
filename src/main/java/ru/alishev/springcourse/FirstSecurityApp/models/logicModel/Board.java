@@ -85,29 +85,32 @@ public class Board {
     }
 
 
-    public boolean handleInput(int startCol, int startRow, int endCol, int endRow) {
+    public boolean handleInput(int startRow, int startCol, int endRow, int endCol) {
+        int numRows = array.length;
+        int numCols = array[0].length;
 
-        String temp1 = array[startCol][startRow], temp2 = array[endCol][endRow];
+        String temp1 = array[startRow][startCol], temp2 = array[endRow][endCol];
 
-        if(array[startCol][startRow].equals(array[endCol][endRow])) {
-            array[startCol][startRow] = " ";
-            array[endCol][endRow] = " ";
-            if (isReachable(startCol, startRow, endCol, endRow)) {
-                array[startCol][startRow] = " ";
-                array[endCol][endRow] = " ";
+        if (array[startRow][startCol].equals(array[endRow][endCol])) {
+            array[startRow][startCol] = " ";
+            array[endRow][endCol] = " ";
+
+            if (isReachable(startRow, startCol, endRow, endCol, numRows, numCols)) {
+                array[startRow][startCol] = " ";
+                array[endRow][endCol] = " ";
                 return true;
             } else {
-                array[startCol][startRow] = temp1;
-                array[endCol][endRow] = temp2;
+                array[startRow][startCol] = temp1;
+                array[endRow][endCol] = temp2;
             }
-            if(startCol == endCol && (startCol == 0 || startCol == cols -1)){
-                array[startCol][startRow] = " ";
-                array[endCol][endRow] = " ";
 
+            if (startCol == endCol && (startCol == 0 || startCol == numCols - 1)) {
+                array[startRow][startCol] = " ";
+                array[endRow][endCol] = " ";
                 return true;
-            }else if(startRow == endRow && (startRow == 0 || startRow == rows -1)){
-                array[startCol][startRow] = " ";
-                array[endCol][endRow] = " ";
+            } else if (startRow == endRow && (startRow == 0 || startRow == numRows - 1)) {
+                array[startRow][startCol] = " ";
+                array[endRow][endCol] = " ";
                 return true;
             }
         }
@@ -115,12 +118,12 @@ public class Board {
     }
 
 
-    private boolean isReachable(int startCol, int startRow, int endCol, int endRow) {
+    private boolean isReachable(int startRow, int startCol, int endRow, int endCol, int numRows, int numCols) {
         Queue<int[]> queue = new LinkedList<>();
 
         queue.add(new int[]{startRow, startCol});
 
-        boolean[][] visited = new boolean[array.length][array[0].length];
+        boolean[][] visited = new boolean[numRows][numCols];
         visited[startRow][startCol] = true;
 
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
@@ -138,7 +141,7 @@ public class Board {
                 int nextRow = currRow + dir[0];
                 int nextCol = currCol + dir[1];
 
-                if (nextRow >= 0 && nextRow < array.length && nextCol >= 0 && nextCol < array[0].length
+                if (nextRow >= 0 && nextRow < numRows && nextCol >= 0 && nextCol < numCols
                         && !visited[nextRow][nextCol] && array[nextRow][nextCol].equals(" ")) {
 
                     visited[nextRow][nextCol] = true;
@@ -148,6 +151,8 @@ public class Board {
         }
         return false;
     }
+
+
 
     public void reloadBoard(String[][] array){
         this.array = array;
